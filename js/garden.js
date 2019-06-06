@@ -2,38 +2,38 @@
 	        this.x = x;
 	        this.y = y;
 	    };
-		
+
 	    Vector.prototype = {
-	        rotate: function (theta) {
+	        rotate: function(theta) {
 	            var x = this.x;
 	            var y = this.y;
 	            this.x = Math.cos(theta) * x - Math.sin(theta) * y;
 	            this.y = Math.sin(theta) * x + Math.cos(theta) * y;
 	            return this;
 	        },
-	        mult: function (f) {
+	        mult: function(f) {
 	            this.x *= f;
 	            this.y *= f;
 	            return this;
 	        },
-	        clone: function () {
+	        clone: function() {
 	            return new Vector(this.x, this.y);
 	        },
-	        length: function () {
+	        length: function() {
 	            return Math.sqrt(this.x * this.x + this.y * this.y);
 	        },
-	        subtract: function (v) {
+	        subtract: function(v) {
 	            this.x -= v.x;
 	            this.y -= v.y;
 	            return this;
 	        },
-	        set: function (x, y) {
+	        set: function(x, y) {
 	            this.x = x;
 	            this.y = y;
 	            return this;
 	        }
 	    };
-		
+
 	    function Petal(stretchA, stretchB, startAngle, angle, growFactor, bloom) {
 	        this.stretchA = stretchA;
 	        this.stretchB = stretchB;
@@ -47,7 +47,7 @@
 	        //this.tanAngleB = Garden.random(-Garden.degrad(Garden.options.tanAngle), Garden.degrad(Garden.options.tanAngle));
 	    }
 	    Petal.prototype = {
-	        draw: function () {
+	        draw: function() {
 	            var ctx = this.bloom.garden.ctx;
 	            var v1, v2, v3, v4;
 	            v1 = new Vector(0, this.r).rotate(Garden.degrad(this.startAngle));
@@ -60,7 +60,7 @@
 	            ctx.bezierCurveTo(v3.x, v3.y, v4.x, v4.y, v2.x, v2.y);
 	            ctx.stroke();
 	        },
-	        render: function () {
+	        render: function() {
 	            if (this.r <= this.bloom.r) {
 	                this.r += this.growFactor; // / 10;
 	                this.draw();
@@ -81,7 +81,7 @@
 	        this.garden.addBloom(this);
 	    }
 	    Bloom.prototype = {
-	        draw: function () {
+	        draw: function() {
 	            var p, isfinished = true;
 	            this.garden.ctx.save();
 	            this.garden.ctx.translate(this.p.x, this.p.y);
@@ -95,7 +95,7 @@
 	                this.garden.removeBloom(this);
 	            }
 	        },
-	        init: function () {
+	        init: function() {
 	            var angle = 360 / this.pc;
 	            var startAngle = Garden.randomInt(0, 90);
 	            for (var i = 0; i < this.pc; i++) {
@@ -110,15 +110,15 @@
 	        this.ctx = ctx;
 	    }
 	    Garden.prototype = {
-	        render: function () {
+	        render: function() {
 	            for (var i = 0; i < this.blooms.length; i++) {
 	                this.blooms[i].draw();
 	            }
 	        },
-	        addBloom: function (b) {
+	        addBloom: function(b) {
 	            this.blooms.push(b);
 	        },
-	        removeBloom: function (b) {
+	        removeBloom: function(b) {
 	            var bloom;
 	            for (var i = 0; i < this.blooms.length; i++) {
 	                bloom = this.blooms[i];
@@ -128,13 +128,13 @@
 	                }
 	            }
 	        },
-	        createRandomBloom: function (x, y) {
+	        createRandomBloom: function(x, y) {
 	            this.createBloom(x, y, Garden.randomInt(Garden.options.bloomRadius.min, Garden.options.bloomRadius.max), Garden.randomrgba(Garden.options.color.rmin, Garden.options.color.rmax, Garden.options.color.gmin, Garden.options.color.gmax, Garden.options.color.bmin, Garden.options.color.bmax, Garden.options.color.opacity), Garden.randomInt(Garden.options.petalCount.min, Garden.options.petalCount.max));
 	        },
-	        createBloom: function (x, y, r, c, pc) {
+	        createBloom: function(x, y, r, c, pc) {
 	            new Bloom(new Vector(x, y), r, c, pc, this);
 	        },
-	        clear: function () {
+	        clear: function() {
 	            this.blooms = [];
 	            this.ctx.clearRect(0, 0, this.element.width, this.element.height);
 	        }
@@ -160,40 +160,40 @@
 	        density: 10,
 	        growSpeed: 1000 / 60,
 	        color: {
-				rmin: 128,
-				rmax: 255,
-				gmin: 0,
-				gmax: 128,
-				bmin: 0,
-				bmax: 128,
+	            rmin: 128,
+	            rmax: 255,
+	            gmin: 0,
+	            gmax: 128,
+	            bmin: 0,
+	            bmax: 128,
 	            opacity: 0.1
 	        },
 	        tanAngle: 60
 	    };
-	    Garden.random = function (min, max) {
+	    Garden.random = function(min, max) {
 	        return Math.random() * (max - min) + min;
 	    };
-	    Garden.randomInt = function (min, max) {
+	    Garden.randomInt = function(min, max) {
 	        return Math.floor(Math.random() * (max - min + 1)) + min;
 	    };
 	    Garden.circle = 2 * Math.PI;
-	    Garden.degrad = function (angle) {
+	    Garden.degrad = function(angle) {
 	        return Garden.circle / 360 * angle;
 	    };
-	    Garden.raddeg = function (angle) {
+	    Garden.raddeg = function(angle) {
 	        return angle / Garden.circle * 360;
 	    };
-	    Garden.rgba = function (r, g, b, a) {
+	    Garden.rgba = function(r, g, b, a) {
 	        return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
 	    };
-	    Garden.randomrgba = function (rmin, rmax, gmin, gmax, bmin, bmax, a) {
-			var r = Math.round(Garden.random(rmin, rmax));
-			var g = Math.round(Garden.random(gmin, gmax));
-			var b = Math.round(Garden.random(bmin, bmax));
-			var limit = 5;
-			if (Math.abs(r - g) <= limit && Math.abs(g - b) <= limit && Math.abs(b - r) <= limit) {
-				return Garden.rgba(rmin, rmax, gmin, gmax, bmin, bmax, a);
-			} else {
-				return Garden.rgba(r, g, b, a);
-			}
+	    Garden.randomrgba = function(rmin, rmax, gmin, gmax, bmin, bmax, a) {
+	        var r = Math.round(Garden.random(rmin, rmax));
+	        var g = Math.round(Garden.random(gmin, gmax));
+	        var b = Math.round(Garden.random(bmin, bmax));
+	        var limit = 5;
+	        if (Math.abs(r - g) <= limit && Math.abs(g - b) <= limit && Math.abs(b - r) <= limit) {
+	            return Garden.rgba(rmin, rmax, gmin, gmax, bmin, bmax, a);
+	        } else {
+	            return Garden.rgba(r, g, b, a);
+	        }
 	    };
